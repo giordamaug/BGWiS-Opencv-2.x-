@@ -1,15 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
-
-# Change compiler to GCC to support OpenMP
-if( USE_GCC )
-    set( CMAKE_C_COMPILER /opt/local/bin/gcc-mp-4.8 )
-    set( CMAKE_CXX_COMPILER /opt/local/bin/g++-mp-4.8 )
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 " )
-    message(Building\ with\ GCC\ to\ include\ OpenMP\ support)
-else()
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 " )
-    message(Building\ with\ CLANG\) )
-endif()
+cmake_minimum_required(VERSION 2.8)
 
 project( cdwisard )
 
