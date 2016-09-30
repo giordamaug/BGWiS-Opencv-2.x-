@@ -44,8 +44,11 @@ Instructions and Notes
 ----------------------
 
 To run the code the following libraries must be installed:
+
 1. OpenCV 2.x (later versions 3.x doesn't work)
+
 2. CMake  2.8  (later version may also work)
+
 3. C++ Compiler (tested with GCC 4.9.x)
 
 Configure and compile sources:
