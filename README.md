@@ -1,4 +1,4 @@
-# SBMI
+# BGWiS
 Background Modeling by Weightless Neural Networks
 
 Authors: Maurizio Giordano and Massimo De Gregorio
