@@ -264,7 +264,7 @@ namespace cv {
                 updateMaxColor(color,keys,fgdata++,fgdata++,fgdata++);  // update bgmodel in all pixels
             }
         }
-        if (learningStage > 0) {
+        if (learningStage >= 0) {
             learningStage--;
         }
     }
