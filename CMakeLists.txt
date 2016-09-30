@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project( cdwisard )
+project( bgwis )
 
 # Find OpenMP
 find_package(OpenMP)
@@ -24,7 +24,7 @@ set(BGWIZSRC_NAME CDwizlib/bgwis.cpp)
 set(MAINSRC_NAME cdwisard.cpp)
 
 set(CDWIZLIB_NAME cdwiz_$ENV{USER})
-set(CDWIZEXE_NAME cdwisard_$ENV{USER})
+set(CDWIZEXE_NAME bgwis)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories( /opt/local/include/opencv2 )
 
