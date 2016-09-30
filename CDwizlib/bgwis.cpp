@@ -193,7 +193,6 @@ namespace cv {
         _neigh_map = _wiznet->neigh_map;
         
         // Create mask frame
-        _fgmask.create( frameSize, CV_8U );
         _fgdetect.create( frameSize, frameType );
     }
     
@@ -221,14 +220,13 @@ namespace cv {
         _neigh_map = _wiznet->neigh_map;
         
         // Create mask frame
-        _fgmask.create( frameSize, CV_8U );
         _fgdetect.create( frameSize, _frameType );
         _fgdetect = Scalar(0, 0, 0);
     }
     
     void BackgroundSubtractorWIS::operator ()( const Mat& image, Mat& fgmask) {
         const uchar *data;
-        uchar *odata, *fgdata, *color;
+        uchar *fgdata, *color;
         wentry_t **discr;
         wkey_t *tuple;
         keyval_t *keys;
@@ -240,15 +238,13 @@ namespace cv {
         wisard_t *wiznet = _wiznet;
         int *histos = histoArray;
         
-        fgmask = _fgmask;
         Mat fgdetect = _fgdetect;
         fgdetect = Scalar(0, 0, 0);
         double sum=0;
         neigh_map = wiznet->neigh_map;
-#pragma omp parallel for schedule(static) shared(image,fgmask,fgdetect,wiznet,neigh_map) private(sum,discr,cache,data,odata,fgdata,R,G,B,color,keys)
+#pragma omp parallel for schedule(static) shared(image,fgdetect,wiznet,neigh_map) private(sum,discr,cache,data,fgdata,R,G,B,color,keys)
         for (int j=0; j<image.rows; j++) {
             data= image.ptr<uchar>(j);
-            odata= fgmask.ptr<uchar>(j);
             fgdata= fgdetect.ptr<uchar>(j);
             for (int i=0; i<image.cols; i++) {
                 discr = wiznet->net[j*image.cols + i]; // get discriminator of pixel
@@ -263,19 +259,9 @@ namespace cv {
                 // classify
                 sum = 0;
                 for (int neuron=0;neuron<noRams;neuron++) {
-                    //if (wram_get(discr[neuron],cache->tuple[neuron]) > varWatermark) {
-                    //    sum++;
-                    //}
-                    if (learningStage > 0 || cache->weight > selectThreshold) keys[neuron] = wram_up_key_down_rest(discr[neuron], cache->tuple[neuron],trainIncr,trainDecr,varUpWatermark);
+                    if (learningStage >= 0 || cache->weight > selectThreshold) keys[neuron] = wram_up_key_down_rest(discr[neuron], cache->tuple[neuron],trainIncr,trainDecr,varUpWatermark);
                 }
- 
-                // update output mask
-                //if (sum/(double)noRams >= varThreshold) {  // (sigma) Pixel is black (BG)
-                //    *odata++ = (uchar)0; // set pixel to BG
-                //} else {                                   // pixels is white (FG)
-                //    *odata++ = (uchar)255; // set pixel to FG
-                //}
-                updateMaxColor(color,keys,fgdata++,fgdata++,fgdata++);  // update bgmodel in all pixels                
+                updateMaxColor(color,keys,fgdata++,fgdata++,fgdata++);  // update bgmodel in all pixels
             }
         }
         if (learningStage > 0) {
