@@ -54,4 +54,4 @@ $ cmake .
 
 $ make
 
-$ bgwis  -i <inputidr>
+$ bgwis  -h \<inputidr\>
